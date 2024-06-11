@@ -35,9 +35,9 @@ namespace DiscordCommands.Helpers
 
                 var sent = channel.PostMessage(message);
             }
-            catch (Exception ex)
+            catch (RatelimitedException ex)
             {
-                Logger.LogException(ex, "Exception occurred in Suggest method");
+                Logger.LogException(ex, "Exception occurred in SuggestForum method");
             }
         }
         public static void Suggest(UnturnedPlayer caller, string suggestion, string title)
@@ -64,29 +64,26 @@ namespace DiscordCommands.Helpers
         }
         public static void Commend(UnturnedPlayer caller, UnturnedPlayer target, string reason)
         {
-            ThreadPool.QueueUserWorkItem((WaitCallback)(async _ =>
+            try
             {
-                try
-                {
-                    var channel = new DiscordWebhookChannel(Main.Instance.Configuration.Instance.Commend.Webhook);
+                var channel = new DiscordWebhookChannel(Main.Instance.Configuration.Instance.Commend.Webhook);
 
-                    var message = new WebhookMessage()
-                    .PassEmbed()
-                    .WithTitle("Player Commendation")
-                    .WithColor(EmbedColor.DarkOliveGreen)
-                    .WithField("Player", $"[{target.CharacterName}](https://steamcommunity.com/profiles/{target.CSteamID})", true)
-                    .WithField("Reason", reason, false)
-                    .WithField("From", $"[{caller.CharacterName}](https://steamcommunity.com/profiles/{caller.CSteamID})", false)
-                    .WithFooter("[DiscordCommands] " + DateTime.Now.ToString("dddd, dd MMMM, yyyy"))
-                    .Finalize();
+                var message = new WebhookMessage()
+                .PassEmbed()
+                .WithTitle("Player Commendation")
+                .WithColor(EmbedColor.DarkOliveGreen)
+                .WithField("Player", $"[{target.CharacterName}](https://steamcommunity.com/profiles/{target.CSteamID})", true)
+                .WithField("Reason", reason, false)
+                .WithField("From", $"[{caller.CharacterName}](https://steamcommunity.com/profiles/{caller.CSteamID})", false)
+                .WithFooter("[DiscordCommands] " + DateTime.Now.ToString("dddd, dd MMMM, yyyy"))
+                .Finalize();
 
-                    var sent = await channel.PostMessageAsync(message);
-                }
-                catch (RatelimitedException ex)
-                {
-                    Logger.LogException(ex, "Exception occurred in Suggest method");
-                }
-            }));
+                var sent = channel.PostMessage(message);
+            }
+            catch (RatelimitedException ex)
+            {
+                Logger.LogException(ex, "Exception occurred in Commend method");
+            }
         }
         public static void Praise(UnturnedPlayer caller, UnturnedPlayer target, string reason)
         {
@@ -108,7 +105,7 @@ namespace DiscordCommands.Helpers
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex, "Exception occurred in Suggest method");
+                Logger.LogException(ex, "Exception occurred in Praise method");
             }
         }
     }
