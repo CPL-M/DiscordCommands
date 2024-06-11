@@ -19,93 +19,89 @@ namespace DiscordCommands.Helpers
     {
         public static void SuggestForum(UnturnedPlayer caller, string suggestion, string title)
         {
+            var channel = new DiscordWebhookChannel(Main.Instance.Configuration.Instance.Suggest.Webhook);
+
+            var message = new WebhookMessage()
+            .CreateThread(title)
+            .PassEmbed()
+            .WithTitle(title)
+            .WithColor(EmbedColor.LightGoldenrodYellow)
+            .WithAuthor($"Suggestor: {caller.CharacterName}", "https://steamcommunity.com/profiles/" + caller.CSteamID.ToString())
+            .WithDescription(suggestion)
+            .WithFooter("[DiscordCommands] " + DateTime.Now.ToString("dddd, dd MMMM, yyyy"))
+            .Finalize();
             try
             {
-                var channel = new DiscordWebhookChannel(Main.Instance.Configuration.Instance.Suggest.Webhook);
-
-                var message = new WebhookMessage()
-                .CreateThread(title)
-                .PassEmbed()
-                .WithTitle(title)
-                .WithColor(EmbedColor.LightGoldenrodYellow)
-                .WithAuthor($"Suggestor: {caller.CharacterName}", "https://steamcommunity.com/profiles/" + caller.CSteamID.ToString())
-                .WithDescription(suggestion)
-                .WithFooter("[DiscordCommands] " + DateTime.Now.ToString("dddd, dd MMMM, yyyy"))
-                .Finalize();
-
                 var sent = channel.PostMessage(message);
             }
-            catch (RatelimitedException ex)
+            catch (RatelimitedException)
             {
-                Logger.LogException(ex, "Exception occurred in SuggestForum method");
+                var sent = channel.PostMessage(message);
             }
         }
         public static void Suggest(UnturnedPlayer caller, string suggestion, string title)
         {
+            var channel = new DiscordWebhookChannel(Main.Instance.Configuration.Instance.Suggest.Webhook);
+
+            var message = new WebhookMessage()
+            .PassEmbed()
+            .WithTitle("Suggestion")
+            .WithColor(EmbedColor.LightGoldenrodYellow)
+            .WithField(title, suggestion)
+            .WithField("From", $"[{caller.CharacterName}](https://steamcommunity.com/profiles/{caller.CSteamID})", false)
+            .WithFooter("[DiscordCommands] " + DateTime.Now.ToString("dddd, dd MMMM, yyyy"))
+            .Finalize();
             try
             {
-                var channel = new DiscordWebhookChannel(Main.Instance.Configuration.Instance.Suggest.Webhook);
-
-                var message = new WebhookMessage()
-                .PassEmbed()
-                .WithTitle("Suggestion")
-                .WithColor(EmbedColor.LightGoldenrodYellow)
-                .WithField(title, suggestion)
-                .WithField("From", $"[{caller.CharacterName}](https://steamcommunity.com/profiles/{caller.CSteamID})", false)
-                .WithFooter("[DiscordCommands] " + DateTime.Now.ToString("dddd, dd MMMM, yyyy"))
-                .Finalize();
-
                 var sent = channel.PostMessage(message);
             }
-            catch (RatelimitedException ex)
+            catch (RatelimitedException)
             {
-                Logger.LogException(ex, "Exception occurred in Suggest method");
+                var sent = channel.PostMessage(message);
             }
         }
         public static void Commend(UnturnedPlayer caller, UnturnedPlayer target, string reason)
         {
+            var channel = new DiscordWebhookChannel(Main.Instance.Configuration.Instance.Commend.Webhook);
+
+            var message = new WebhookMessage()
+            .PassEmbed()
+            .WithTitle("Player Commendation")
+            .WithColor(EmbedColor.DarkOliveGreen)
+            .WithField("Player", $"[{target.CharacterName}](https://steamcommunity.com/profiles/{target.CSteamID})", true)
+            .WithField("Reason", reason, false)
+            .WithField("From", $"[{caller.CharacterName}](https://steamcommunity.com/profiles/{caller.CSteamID})", false)
+            .WithFooter("[DiscordCommands] " + DateTime.Now.ToString("dddd, dd MMMM, yyyy"))
+            .Finalize();
             try
             {
-                var channel = new DiscordWebhookChannel(Main.Instance.Configuration.Instance.Commend.Webhook);
-
-                var message = new WebhookMessage()
-                .PassEmbed()
-                .WithTitle("Player Commendation")
-                .WithColor(EmbedColor.DarkOliveGreen)
-                .WithField("Player", $"[{target.CharacterName}](https://steamcommunity.com/profiles/{target.CSteamID})", true)
-                .WithField("Reason", reason, false)
-                .WithField("From", $"[{caller.CharacterName}](https://steamcommunity.com/profiles/{caller.CSteamID})", false)
-                .WithFooter("[DiscordCommands] " + DateTime.Now.ToString("dddd, dd MMMM, yyyy"))
-                .Finalize();
-
                 var sent = channel.PostMessage(message);
             }
-            catch (RatelimitedException ex)
+            catch (RatelimitedException)
             {
-                Logger.LogException(ex, "Exception occurred in Commend method");
+                var sent = channel.PostMessage(message);
             }
         }
         public static void Praise(UnturnedPlayer caller, UnturnedPlayer target, string reason)
         {
+            var channel = new DiscordWebhookChannel(Main.Instance.Configuration.Instance.Praise.Webhook);
+
+            var message = new WebhookMessage()
+            .PassEmbed()
+            .WithTitle("Staff Praise")
+            .WithColor(EmbedColor.MediumSpringGreen)
+            .WithField("Staff Member", $"[{target.CharacterName}](https://steamcommunity.com/profiles/{target.CSteamID})", true)
+            .WithField("Reason", reason, false)
+            .WithField("From", $"[{caller.CharacterName}](https://steamcommunity.com/profiles/{caller.CSteamID})", false)
+            .WithFooter("[DiscordCommands] " + DateTime.Now.ToString("dddd, dd MMMM, yyyy"))
+            .Finalize();
             try
             {
-                var channel = new DiscordWebhookChannel(Main.Instance.Configuration.Instance.Praise.Webhook);
-
-                var message = new WebhookMessage()
-                .PassEmbed()
-                .WithTitle("Staff Praise")
-                .WithColor(EmbedColor.MediumSpringGreen)
-                .WithField("Staff Member", $"[{target.CharacterName}](https://steamcommunity.com/profiles/{target.CSteamID})", true)
-                .WithField("Reason", reason, false)
-                .WithField("From", $"[{caller.CharacterName}](https://steamcommunity.com/profiles/{caller.CSteamID})", false)
-                .WithFooter("[DiscordCommands] " + DateTime.Now.ToString("dddd, dd MMMM, yyyy"))
-                .Finalize();
-
                 var sent = channel.PostMessage(message);
             }
-            catch (Exception ex)
+            catch (RatelimitedException)
             {
-                Logger.LogException(ex, "Exception occurred in Praise method");
+                var sent = channel.PostMessage(message);
             }
         }
     }
