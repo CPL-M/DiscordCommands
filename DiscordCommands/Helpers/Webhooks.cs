@@ -12,6 +12,7 @@ using System.Reflection;
 using Rocket.Core.Logging;
 using static UnityEngine.GraphicsBuffer;
 using ShimmyMySherbet.DiscordWebhooks.Models.Exceptions;
+using UnityEngine;
 
 namespace DiscordCommands.Helpers
 {
@@ -34,9 +35,9 @@ namespace DiscordCommands.Helpers
             {
                 var sent = channel.PostMessage(message);
             }
-            catch (RatelimitedException)
+            catch (Exception ex)
             {
-                var sent = channel.PostMessage(message);
+                Debug.LogError($"Rate limit hit while sending webhook message: {ex.Message}");
             }
         }
         public static void Suggest(UnturnedPlayer caller, string suggestion, string title)
@@ -55,9 +56,9 @@ namespace DiscordCommands.Helpers
             {
                 var sent = channel.PostMessage(message);
             }
-            catch (RatelimitedException)
+            catch (Exception ex)
             {
-                var sent = channel.PostMessage(message);
+                Debug.LogError($"Rate limit hit while sending webhook message: {ex.Message}");
             }
         }
         public static void Commend(UnturnedPlayer caller, UnturnedPlayer target, string reason)
@@ -77,9 +78,9 @@ namespace DiscordCommands.Helpers
             {
                 var sent = channel.PostMessage(message);
             }
-            catch (RatelimitedException)
+            catch (Exception ex)
             {
-                var sent = channel.PostMessage(message);
+                Debug.LogError($"Rate limit hit while sending webhook message: {ex.Message}");
             }
         }
         public static void Praise(UnturnedPlayer caller, UnturnedPlayer target, string reason)
@@ -99,9 +100,9 @@ namespace DiscordCommands.Helpers
             {
                 var sent = channel.PostMessage(message);
             }
-            catch (RatelimitedException)
+            catch (Exception ex)
             {
-                var sent = channel.PostMessage(message);
+                Debug.LogError($"Rate limit hit while sending webhook message: {ex.Message}");
             }
         }
     }
